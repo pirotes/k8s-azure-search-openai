@@ -11,7 +11,7 @@ azd auth login
 ```
 or in github codespace
 ```bash
- az login --tenant <tenant>--use-device-code
+ az login --tenant <tenant> --use-device-code
  azd auth login --tenant-id <tenant>  --use-device-code
 ```
 
@@ -36,8 +36,12 @@ source <(azd env get-values)
 >`.azure/<환경>/.env` 내 `AZURE_AUTH_TENANT_ID`와 `AZURE_TENANT_ID`가 있는 지 확인
 > 없으면 `az account show --query tenantId -o tsv`로 값을 가져와서 넣어줄 것
 
-### Pod에서 사용할 Workload Identity 생성
+### Kubectl contexting
+```bash
+az aks get-credentials --name "${AZURE_AKS_CLUSTER_NAME}" --resource-group "${AZURE_RESOURCE_GROUP}" --overwrite-existing
+```
 
+### Pod에서 사용할 Workload Identity 생성
 
 ```bash
 az aks update --resource-group "${AZURE_RESOURCE_GROUP}" --name "${AZURE_AKS_CLUSTER_NAME}" --enable-oidc-issuer --enable-workload-identity
@@ -74,6 +78,7 @@ az role assignment create --assignee $USER_ASSIGNED_CLIENT_ID --role "Search Ind
 # Assign Storage Blob Data Contributor role to USER_ASSIGNED_CLIENT_ID for Azure Storage Account
 az role assignment create --assignee $USER_ASSIGNED_CLIENT_ID --role "Storage Blob Data Contributor" --scope $AZURE_STORAGE_ACCOUNT
 ```
+
 
 ### 앱 배포
 ```bash
